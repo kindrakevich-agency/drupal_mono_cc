@@ -87,6 +87,20 @@ class CurrencyConverterController extends ControllerBase {
       ],
     ];
 
+    // Check if Tailwind CDN should be enabled.
+    $config = $this->config('monobank_currency.settings');
+    if ($config->get('use_tailwind_cdn')) {
+      $build['#attached']['html_head'][] = [
+        [
+          '#tag' => 'script',
+          '#attributes' => [
+            'src' => 'https://cdn.tailwindcss.com',
+          ],
+        ],
+        'monobank_currency_tailwind_cdn',
+      ];
+    }
+
     return $build;
   }
 

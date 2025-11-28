@@ -67,6 +67,13 @@ class MonobankCurrencySettingsForm extends ConfigFormBase {
       '#markup' => '<p>' . $this->t('The Monobank Currency Converter module fetches currency rates from the Monobank API every time cron runs (recommended: every 30 minutes).') . '</p>',
     ];
 
+    $form['general']['use_tailwind_cdn'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Use Tailwind CDN'),
+      '#default_value' => $config->get('use_tailwind_cdn') ?? FALSE,
+      '#description' => $this->t('Enable Tailwind CSS from CDN (https://cdn.tailwindcss.com) for enhanced styling on the converter page.'),
+    ];
+
     $form['cache'] = [
       '#type' => 'fieldset',
       '#title' => $this->t('Cache Management'),
@@ -144,6 +151,10 @@ class MonobankCurrencySettingsForm extends ConfigFormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
+    $this->config('monobank_currency.settings')
+      ->set('use_tailwind_cdn', $form_state->getValue('use_tailwind_cdn'))
+      ->save();
+
     parent::submitForm($form, $form_state);
   }
 
