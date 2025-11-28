@@ -66,167 +66,20 @@ class CurrencyConverterForm extends FormBase {
     // Get popular currencies for the dropdown.
     $currencies = $this->getPopularCurrencies();
 
-    // Mode selector.
-    $form['mode'] = [
-      '#type' => 'radios',
-      '#title' => $this->t('Conversion Mode'),
-      '#options' => [
-        'from' => $this->t('Convert From'),
-        'to' => $this->t('Convert To'),
-      ],
-      '#default_value' => $form_state->getValue('mode', 'from'),
-      '#ajax' => [
-        'callback' => '::ajaxUpdateForm',
-        'wrapper' => 'converter-wrapper',
-      ],
+    // Simple converter with from/to selects.
+    $form['from_currency'] = [
+      '#type' => 'select',
+      '#options' => $currencies,
+      '#default_value' => 840, // USD
     ];
 
-    $form['converter'] = [
-      '#type' => 'container',
-      '#attributes' => ['id' => 'converter-wrapper'],
+    $form['to_currency'] = [
+      '#type' => 'select',
+      '#options' => $currencies,
+      '#default_value' => 980, // UAH
     ];
-
-    $mode = $form_state->getValue('mode', 'from');
-
-    if ($mode === 'from') {
-      // Convert From mode.
-      $form['converter']['from_currency'] = [
-        '#type' => 'select',
-        '#title' => $this->t('Convert From'),
-        '#options' => $currencies,
-        '#default_value' => $form_state->getValue('from_currency', 840),
-        '#ajax' => [
-          'callback' => '::ajaxCalculate',
-          'wrapper' => 'result-wrapper',
-        ],
-      ];
-
-      $form['converter']['amount'] = [
-        '#type' => 'number',
-        '#title' => $this->t('Amount to exchange'),
-        '#default_value' => $form_state->getValue('amount', 100),
-        '#step' => 0.01,
-        '#min' => 0,
-        '#ajax' => [
-          'callback' => '::ajaxCalculate',
-          'wrapper' => 'result-wrapper',
-        ],
-      ];
-
-      $form['converter']['to_currency'] = [
-        '#type' => 'select',
-        '#title' => $this->t('To'),
-        '#options' => $currencies,
-        '#default_value' => $form_state->getValue('to_currency', 980),
-        '#ajax' => [
-          'callback' => '::ajaxCalculate',
-          'wrapper' => 'result-wrapper',
-        ],
-      ];
-    }
-    else {
-      // Convert To mode.
-      $form['converter']['to_currency'] = [
-        '#type' => 'select',
-        '#title' => $this->t('Convert To'),
-        '#options' => $currencies,
-        '#default_value' => $form_state->getValue('to_currency', 980),
-        '#ajax' => [
-          'callback' => '::ajaxCalculate',
-          'wrapper' => 'result-wrapper',
-        ],
-      ];
-
-      $form['converter']['target_amount'] = [
-        '#type' => 'number',
-        '#title' => $this->t('Amount to receive'),
-        '#default_value' => $form_state->getValue('target_amount', 3800),
-        '#step' => 0.01,
-        '#min' => 0,
-        '#ajax' => [
-          'callback' => '::ajaxCalculate',
-          'wrapper' => 'result-wrapper',
-        ],
-      ];
-
-      $form['converter']['from_currency'] = [
-        '#type' => 'select',
-        '#title' => $this->t('From'),
-        '#options' => $currencies,
-        '#default_value' => $form_state->getValue('from_currency', 840),
-        '#ajax' => [
-          'callback' => '::ajaxCalculate',
-          'wrapper' => 'result-wrapper',
-        ],
-      ];
-    }
-
-    $form['result'] = [
-      '#type' => 'container',
-      '#attributes' => ['id' => 'result-wrapper', 'class' => ['conversion-result']],
-    ];
-
-    // Calculate and display result.
-    $result = $this->calculateConversion($form_state);
-    if ($result !== NULL) {
-      $from_currency_info = $this->currencyMapper->getCurrencyByCode($form_state->getValue('from_currency', 840));
-      $to_currency_info = $this->currencyMapper->getCurrencyByCode($form_state->getValue('to_currency', 980));
-
-      if ($mode === 'from') {
-        $form['result']['output'] = [
-          '#markup' => '<div class="result-display"><strong>' . $this->t('Result:') . '</strong> ' .
-            number_format($result, 2) . ' ' . $to_currency_info['code'] . '</div>',
-        ];
-      }
-      else {
-        $form['result']['output'] = [
-          '#markup' => '<div class="result-display"><strong>' . $this->t('Required:') . '</strong> ' .
-            number_format($result, 2) . ' ' . $from_currency_info['code'] . '</div>',
-        ];
-      }
-    }
 
     return $form;
-  }
-
-  /**
-   * AJAX callback to update form.
-   */
-  public function ajaxUpdateForm(array &$form, FormStateInterface $form_state) {
-    return $form['converter'];
-  }
-
-  /**
-   * AJAX callback to calculate conversion.
-   */
-  public function ajaxCalculate(array &$form, FormStateInterface $form_state) {
-    return $form['result'];
-  }
-
-  /**
-   * Calculate currency conversion.
-   *
-   * @param \Drupal\Core\Form\FormStateInterface $form_state
-   *   The form state.
-   *
-   * @return float|null
-   *   Converted amount or NULL.
-   */
-  protected function calculateConversion(FormStateInterface $form_state) {
-    $mode = $form_state->getValue('mode', 'from');
-    $from = $form_state->getValue('from_currency', 840);
-    $to = $form_state->getValue('to_currency', 980);
-
-    if ($mode === 'from') {
-      $amount = $form_state->getValue('amount', 100);
-      return $this->currencyService->convert($amount, $from, $to, 'sell');
-    }
-    else {
-      $target_amount = $form_state->getValue('target_amount', 3800);
-      // Calculate how much source currency is needed.
-      $reverse = $this->currencyService->convert($target_amount, $to, $from, 'buy');
-      return $reverse;
-    }
   }
 
   /**

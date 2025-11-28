@@ -6,6 +6,28 @@
 (function (drupalSettings) {
   'use strict';
 
+  // Currency code to country code mapping for flags.
+  const currencyToCountry = {
+    840: 'us',   // USD
+    978: 'eu',   // EUR
+    980: 'ua',   // UAH
+    826: 'gb',   // GBP
+    392: 'jp',   // JPY
+    756: 'ch',   // CHF
+    156: 'cn',   // CNY
+    985: 'pl',   // PLN
+    124: 'ca',   // CAD
+    36: 'au',    // AUD
+    578: 'no',   // NOK
+    752: 'se',   // SEK
+    208: 'dk',   // DKK
+    203: 'cz',   // CZK
+    348: 'hu',   // HUF
+    946: 'ro',   // RON
+    975: 'bg',   // BGN
+    191: 'hr',   // HRK
+  };
+
   // Wait for DOM to be ready.
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', init);
@@ -19,15 +41,20 @@
 
     // Get elements.
     const swapButton = document.getElementById('swap-currencies');
-    const amountInput = document.querySelector('input[name="amount"]');
-    const fromSelect = document.querySelector('select[name="from_currency"]');
-    const toSelect = document.querySelector('select[name="to_currency"]');
+    const amountInput = document.getElementById('currency-amount');
+    const fromSelect = document.getElementById('from-currency-select');
+    const toSelect = document.getElementById('to-currency-select');
     const convertedAmount = document.getElementById('converted-amount');
     const currencySearch = document.getElementById('currency-search');
+    const fromFlag = document.getElementById('from-flag');
+    const toFlag = document.getElementById('to-flag');
 
     if (!amountInput || !fromSelect || !toSelect || !convertedAmount) {
       return;
     }
+
+    // Update flags initially.
+    updateFlags();
 
     // Swap button functionality.
     if (swapButton) {
@@ -37,6 +64,7 @@
         const toVal = toSelect.value;
         fromSelect.value = toVal;
         toSelect.value = fromVal;
+        updateFlags();
         calculateConversion();
         highlightCurrencyRows();
       });
@@ -47,11 +75,13 @@
 
     // Live calculation on currency change.
     fromSelect.addEventListener('change', function() {
+      updateFlags();
       calculateConversion();
       highlightCurrencyRows();
     });
 
     toSelect.addEventListener('change', function() {
+      updateFlags();
       calculateConversion();
       highlightCurrencyRows();
     });
@@ -76,6 +106,27 @@
     // Initial calculation.
     calculateConversion();
     highlightCurrencyRows();
+
+    /**
+     * Update flag images based on selected currencies.
+     */
+    function updateFlags() {
+      const fromCode = parseInt(fromSelect.value);
+      const toCode = parseInt(toSelect.value);
+
+      const fromCountry = currencyToCountry[fromCode] || currencies[fromCode]?.country || 'us';
+      const toCountry = currencyToCountry[toCode] || currencies[toCode]?.country || 'ua';
+
+      if (fromFlag) {
+        fromFlag.src = `https://flagcdn.com/24x18/${fromCountry}.png`;
+        fromFlag.alt = fromCountry.toUpperCase();
+      }
+
+      if (toFlag) {
+        toFlag.src = `https://flagcdn.com/24x18/${toCountry}.png`;
+        toFlag.alt = toCountry.toUpperCase();
+      }
+    }
 
     /**
      * Calculate and display conversion.
