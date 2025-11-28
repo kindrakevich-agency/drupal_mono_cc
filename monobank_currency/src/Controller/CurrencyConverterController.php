@@ -116,46 +116,54 @@ class CurrencyConverterController extends ControllerBase {
   protected function buildRatesTable(array $rates) {
     $rows = [];
 
-    // Show all UAH pairs (980).
+    // Get all currencies from mapper.
+    $all_currencies = $this->currencyMapper->getAllCurrencies();
+
+    // Build a map of currency codes to their rates.
+    $rate_map = [];
     foreach ($rates as $rate) {
-      if ($rate['currencyCodeB'] == 980 && $rate['currencyCodeA'] != 980) {
-        $currency_info = $this->currencyMapper->getCurrencyByCode($rate['currencyCodeA']);
+      $key = $rate['currencyCodeA'] . '_' . $rate['currencyCodeB'];
+      $rate_map[$key] = $rate;
+    }
 
-        // Get currency details or use defaults.
-        $currency_code = $currency_info['code'] ?? 'CUR' . $rate['currencyCodeA'];
-        $currency_name = $currency_info['name'] ?? 'Currency ' . $rate['currencyCodeA'];
-        $country = $currency_info['country'] ?? 'xx';
-        $flag_url = $this->currencyMapper->getFlagUrl($country);
+    // Add a row for each currency.
+    foreach ($all_currencies as $code => $currency_info) {
+      // Get currency details.
+      $currency_code = $currency_info['code'] ?? 'CUR' . $code;
+      $currency_name = $currency_info['name'] ?? 'Currency ' . $code;
+      $country = $currency_info['country'] ?? 'xx';
+      $flag_url = $this->currencyMapper->getFlagUrl($country);
 
-        // Determine buy/sell/cross values.
-        // If rateBuy and rateSell exist, use them. Otherwise use rateCross.
+      // Initial rates are calculated to UAH (JavaScript will recalculate).
+      $buy = '-';
+      $sell = '-';
+      $cross = '-';
+
+      // Look for this currency's rate to UAH.
+      $key = $code . '_980';
+      if (isset($rate_map[$key])) {
+        $rate = $rate_map[$key];
         if (isset($rate['rateBuy']) && isset($rate['rateSell'])) {
           $buy = number_format($rate['rateBuy'], 4);
           $sell = number_format($rate['rateSell'], 4);
           $cross = isset($rate['rateCross']) ? number_format($rate['rateCross'], 4) : '-';
         }
         elseif (isset($rate['rateCross'])) {
-          // Use cross rate for buy/sell when they don't exist.
           $buy = number_format($rate['rateCross'], 4);
           $sell = number_format($rate['rateCross'], 4);
           $cross = number_format($rate['rateCross'], 4);
         }
-        else {
-          $buy = '-';
-          $sell = '-';
-          $cross = '-';
-        }
-
-        $rows[] = [
-          'code' => $rate['currencyCodeA'],
-          'currency_code' => $currency_code,
-          'currency_name' => $currency_name,
-          'flag' => $flag_url,
-          'buy' => $buy,
-          'sell' => $sell,
-          'cross' => $cross,
-        ];
       }
+
+      $rows[] = [
+        'code' => $code,
+        'currency_code' => $currency_code,
+        'currency_name' => $currency_name,
+        'flag' => $flag_url,
+        'buy' => $buy,
+        'sell' => $sell,
+        'cross' => $cross,
+      ];
     }
 
     // Sort by currency code.

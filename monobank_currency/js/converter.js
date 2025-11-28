@@ -58,6 +58,7 @@
     // Update flags and header initially.
     updateFlags();
     updateTableHeader();
+    updateBaseCurrencyVisibility();
 
     // Swap button functionality.
     if (swapButton) {
@@ -68,7 +69,10 @@
         fromSelect.value = toVal;
         toSelect.value = fromVal;
         updateFlags();
+        updateTableHeader();
+        updateBaseCurrencyVisibility();
         calculateConversion();
+        updateTableRates();
         highlightCurrencyRows();
       });
     }
@@ -135,6 +139,7 @@
     fromSelect.addEventListener('change', function() {
       updateFlags();
       updateTableHeader();
+      updateBaseCurrencyVisibility();
       calculateConversion();
       updateTableRates();
       highlightCurrencyRows();
@@ -198,6 +203,49 @@
       const fromCode = parseInt(fromSelect.value);
       const currencyCode = currencies[fromCode]?.code || 'UAH';
       tableHeader.textContent = 'Exchange Rates (' + currencyCode + ')';
+    }
+
+    /**
+     * Hide base currency from dropdown and table.
+     */
+    function updateBaseCurrencyVisibility() {
+      const fromCode = parseInt(fromSelect.value);
+
+      // Hide/show options in "to" dropdown.
+      const toOptions = toSelect.querySelectorAll('option');
+      toOptions.forEach(function(option) {
+        const optionValue = parseInt(option.value);
+        if (optionValue === fromCode) {
+          option.style.display = 'none';
+          option.disabled = true;
+          // If this option is currently selected, select a different one.
+          if (toSelect.value == fromCode) {
+            // Find the first visible option that's not the base currency.
+            for (let i = 0; i < toOptions.length; i++) {
+              if (parseInt(toOptions[i].value) !== fromCode) {
+                toSelect.value = toOptions[i].value;
+                updateFlags();
+                calculateConversion();
+                break;
+              }
+            }
+          }
+        } else {
+          option.style.display = '';
+          option.disabled = false;
+        }
+      });
+
+      // Hide base currency row in table.
+      const rows = document.querySelectorAll('.rate-row');
+      rows.forEach(function(row) {
+        const currencyCode = parseInt(row.getAttribute('data-currency-code'));
+        if (currencyCode === fromCode) {
+          row.style.display = 'none';
+        } else {
+          row.style.display = '';
+        }
+      });
     }
 
     /**
