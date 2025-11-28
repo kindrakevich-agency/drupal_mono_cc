@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Currency Converter - Daily Design Challenge</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 min-h-screen flex items-center justify-center p-4">
+    <div class="w-full max-w-2xl">
+        <!-- Header -->
+        <div class="flex justify-center gap-4 mb-12">
+            <div class="bg-white rounded-full px-6 py-3 shadow-sm flex items-center gap-2">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <circle cx="12" cy="12" r="10" stroke-width="2"/>
+                    <polyline points="12 6 12 12 16 14" stroke-width="2"/>
+                </svg>
+                <span class="font-medium text-gray-800">Currency rates as of 12:30</span>
+            </div>
+            <div class="bg-white rounded-full px-6 py-3 shadow-sm flex items-center gap-2">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2" stroke-width="2"/>
+                    <line x1="16" y1="2" x2="16" y2="6" stroke-width="2"/>
+                    <line x1="8" y1="2" x2="8" y2="6" stroke-width="2"/>
+                    <line x1="3" y1="10" x2="21" y2="10" stroke-width="2"/>
+                </svg>
+                <span class="font-medium text-gray-800">Day 20 / 24</span>
+            </div>
+        </div>
+
+        <!-- Converter Card -->
+        <div class="bg-white rounded-3xl shadow-lg p-8 max-w-6xl mx-auto">
+            <div class="flex flex-col lg:flex-row lg:items-center lg:gap-8">
+                <!-- Amount Section -->
+                <div class="mb-6 lg:mb-0 lg:flex-1">
+                    <label class="text-gray-500 text-sm mb-2 block">Amount</label>
+                    <div class="flex items-center justify-between">
+                        <input type="number" value="1000" class="text-5xl font-bold text-gray-900 outline-none w-full" />
+                        <div class="relative">
+                            <select class="appearance-none bg-gray-50 rounded-full pl-12 pr-10 py-2 font-semibold text-gray-900 cursor-pointer hover:bg-gray-100 transition outline-none">
+                                <option value="USD" selected>USD</option>
+                                <option value="EUR">EUR</option>
+                                <option value="GBP">GBP</option>
+                                <option value="NOK">NOK</option>
+                                <option value="SEK">SEK</option>
+                            </select>
+                            <div class="pointer-events-none absolute inset-y-0 left-3 flex items-center">
+                                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='10' fill='%233C3B6E'/%3E%3Cpath d='M12 2a10 10 0 0 0 0 20V2z' fill='%23B22234'/%3E%3Cpath d='M12 2v20a10 10 0 0 0 0-20z' fill='white'/%3E%3Cpath d='M12 2a10 10 0 0 0 0 20' fill='%23B22234'/%3E%3Cpath stroke='white' stroke-width='1.5' d='M2 7h20M2 9h20M2 11h20M2 13h20M2 15h20M2 17h20M2 19h20'/%3E%3Crect width='10' height='10' x='2' y='2' fill='%233C3B6E'/%3E%3C/svg%3E" alt="US Flag" class="w-6 h-6 rounded-full" />
+                            </div>
+                            <div class="pointer-events-none absolute inset-y-0 right-3 flex items-center">
+                                <svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <polyline points="6 9 12 15 18 9" stroke-width="2"/>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Swap Button with Divider -->
+                <div class="relative flex justify-center my-6 lg:my-0">
+                    <div class="absolute inset-0 flex items-center lg:hidden">
+                        <div class="w-full border-t border-gray-200"></div>
+                    </div>
+                    <div class="hidden lg:flex lg:h-24">
+                        <div class="border-l border-gray-200"></div>
+                    </div>
+                    <button class="relative bg-white rounded-full p-4 shadow-md hover:shadow-lg transition lg:absolute lg:top-1/2 lg:left-1/2 lg:transform lg:-translate-x-1/2 lg:-translate-y-1/2">
+                        <svg class="w-6 h-6 text-gray-600 lg:transform lg:rotate-90" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <polyline points="17 11 12 6 7 11" stroke-width="2"/>
+                            <polyline points="7 13 12 18 17 13" stroke-width="2"/>
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- Converted Section -->
+                <div class="mb-6 lg:mb-0 lg:flex-1">
+                    <label class="text-gray-500 text-sm mb-2 block">Converted to</label>
+                    <div class="flex items-center justify-between">
+                        <input type="number" value="11427.60" class="text-5xl font-bold text-gray-900 outline-none w-full" />
+                        <div class="relative">
+                            <select class="appearance-none bg-gray-50 rounded-full pl-12 pr-10 py-2 font-semibold text-gray-900 cursor-pointer hover:bg-gray-100 transition outline-none">
+                                <option value="NOK" selected>NOK</option>
+                                <option value="USD">USD</option>
+                                <option value="EUR">EUR</option>
+                                <option value="GBP">GBP</option>
+                                <option value="SEK">SEK</option>
+                            </select>
+                            <div class="pointer-events-none absolute inset-y-0 left-3 flex items-center">
+                                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='10' fill='%23BA0C2F'/%3E%3Cpath d='M12 2v20M2 12h20' stroke='white' stroke-width='2'/%3E%3Cpath d='M12 2v20' stroke='%230000A0' stroke-width='1.5'/%3E%3Cpath d='M2 12h20' stroke='%230000A0' stroke-width='1.5'/%3E%3C/svg%3E" alt="Norway Flag" class="w-6 h-6 rounded-full" />
+                            </div>
+                            <div class="pointer-events-none absolute inset-y-0 right-3 flex items-center">
+                                <svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <polyline points="6 9 12 15 18 9" stroke-width="2"/>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</body>
+</html>
