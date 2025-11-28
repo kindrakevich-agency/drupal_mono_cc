@@ -49,6 +49,7 @@
     const fromFlag = document.getElementById('from-flag');
     const toFlag = document.getElementById('to-flag');
     const tableHeader = document.getElementById('rates-table-header');
+    const copyButton = document.getElementById('copy-button');
 
     if (!amountInput || !fromSelect || !toSelect || !convertedAmount) {
       return;
@@ -72,6 +73,58 @@
       });
     }
 
+    // Copy button functionality.
+    if (copyButton) {
+      copyButton.addEventListener('click', function(e) {
+        e.preventDefault();
+        const value = convertedAmount.textContent;
+
+        // Use Clipboard API (modern browsers including mobile).
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(value).then(function() {
+            // Show success feedback.
+            const originalText = copyButton.textContent;
+            copyButton.textContent = 'Copied!';
+            copyButton.classList.add('bg-green-100', 'text-green-700');
+            copyButton.classList.remove('bg-gray-100', 'text-gray-700');
+
+            setTimeout(function() {
+              copyButton.textContent = originalText;
+              copyButton.classList.remove('bg-green-100', 'text-green-700');
+              copyButton.classList.add('bg-gray-100', 'text-gray-700');
+            }, 2000);
+          }).catch(function(err) {
+            console.error('Failed to copy:', err);
+          });
+        } else {
+          // Fallback for older browsers.
+          const textArea = document.createElement('textarea');
+          textArea.value = value;
+          textArea.style.position = 'fixed';
+          textArea.style.left = '-999999px';
+          document.body.appendChild(textArea);
+          textArea.select();
+          try {
+            document.execCommand('copy');
+            // Show success feedback.
+            const originalText = copyButton.textContent;
+            copyButton.textContent = 'Copied!';
+            copyButton.classList.add('bg-green-100', 'text-green-700');
+            copyButton.classList.remove('bg-gray-100', 'text-gray-700');
+
+            setTimeout(function() {
+              copyButton.textContent = originalText;
+              copyButton.classList.remove('bg-green-100', 'text-green-700');
+              copyButton.classList.add('bg-gray-100', 'text-gray-700');
+            }, 2000);
+          } catch (err) {
+            console.error('Fallback copy failed:', err);
+          }
+          document.body.removeChild(textArea);
+        }
+      });
+    }
+
     // Live calculation on amount input.
     amountInput.addEventListener('input', function() {
       calculateConversion();
@@ -83,6 +136,7 @@
       updateFlags();
       updateTableHeader();
       calculateConversion();
+      updateTableRates();
       highlightCurrencyRows();
     });
 
@@ -245,29 +299,18 @@
     }
 
     /**
-     * Update table rates based on current amount.
+     * Update table rates based on current amount and selected currency.
      */
     function updateTableRates() {
       const amount = parseFloat(amountInput.value) || 1;
+      const fromCode = parseInt(fromSelect.value);
       const rows = document.querySelectorAll('.rate-row');
 
       rows.forEach(function(row) {
-        const currencyCode = parseInt(row.getAttribute('data-currency-code'));
+        const toCurrencyCode = parseInt(row.getAttribute('data-currency-code'));
 
-        // Find the rate for this currency.
-        let buyRate = null;
-        let sellRate = null;
-        let crossRate = null;
-
-        for (let i = 0; i < rates.length; i++) {
-          const rate = rates[i];
-          if (rate.currencyCodeA == currencyCode && rate.currencyCodeB == 980) {
-            buyRate = rate.rateBuy;
-            sellRate = rate.rateSell;
-            crossRate = rate.rateCross;
-            break;
-          }
-        }
+        // Get the conversion rate from selected currency to this row's currency.
+        const conversionRate = getRate(fromCode, toCurrencyCode);
 
         // Get the table cells.
         const cells = row.querySelectorAll('td');
@@ -276,28 +319,14 @@
           const sellCell = cells[2];
           const crossCell = cells[3];
 
-          // Update buy value.
-          if (buyRate) {
-            buyCell.textContent = (buyRate * amount).toFixed(4);
-          } else if (crossRate) {
-            buyCell.textContent = (crossRate * amount).toFixed(4);
+          if (conversionRate !== null) {
+            const value = (conversionRate * amount).toFixed(4);
+            buyCell.textContent = value;
+            sellCell.textContent = value;
+            crossCell.textContent = value;
           } else {
             buyCell.textContent = '-';
-          }
-
-          // Update sell value.
-          if (sellRate) {
-            sellCell.textContent = (sellRate * amount).toFixed(4);
-          } else if (crossRate) {
-            sellCell.textContent = (crossRate * amount).toFixed(4);
-          } else {
             sellCell.textContent = '-';
-          }
-
-          // Update cross value.
-          if (crossRate) {
-            crossCell.textContent = (crossRate * amount).toFixed(4);
-          } else {
             crossCell.textContent = '-';
           }
         }
