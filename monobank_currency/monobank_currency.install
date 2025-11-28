@@ -1,0 +1,93 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for Monobank Currency module.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function monobank_currency_install() {
+  // Fetch initial currency rates on module installation.
+  $currency_service = \Drupal::service('monobank_currency.currency_service');
+  $rates = $currency_service->getRates(TRUE);
+
+  if (!empty($rates)) {
+    \Drupal::messenger()->addStatus(t('Monobank Currency Converter installed successfully. @count currency rates fetched.', [
+      '@count' => count($rates),
+    ]));
+    \Drupal::logger('monobank_currency')->info('Module installed. Initial fetch: @count rates.', [
+      '@count' => count($rates),
+    ]);
+  }
+  else {
+    \Drupal::messenger()->addWarning(t('Monobank Currency Converter installed, but failed to fetch initial rates. Please run cron or use the settings page to fetch rates manually.'));
+    \Drupal::logger('monobank_currency')->warning('Module installed but initial fetch failed.');
+  }
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function monobank_currency_uninstall() {
+  // Clear currency rates cache.
+  \Drupal::cache()->delete('monobank_currency_rates');
+
+  // Delete module configuration.
+  \Drupal::configFactory()->getEditable('monobank_currency.settings')->delete();
+
+  \Drupal::logger('monobank_currency')->info('Module uninstalled. Cache and configuration cleared.');
+}
+
+/**
+ * Implements hook_requirements().
+ */
+function monobank_currency_requirements($phase) {
+  $requirements = [];
+
+  if ($phase === 'runtime') {
+    $currency_service = \Drupal::service('monobank_currency.currency_service');
+    $cache = \Drupal::cache()->get('monobank_currency_rates');
+
+    if ($cache && !empty($cache->data)) {
+      $requirements['monobank_currency_rates'] = [
+        'title' => t('Monobank Currency Rates'),
+        'value' => t('@count rates cached', ['@count' => count($cache->data)]),
+        'severity' => REQUIREMENT_OK,
+        'description' => t('Last updated: @time', [
+          '@time' => \Drupal::service('date.formatter')->format($cache->created, 'long'),
+        ]),
+      ];
+    }
+    else {
+      $requirements['monobank_currency_rates'] = [
+        'title' => t('Monobank Currency Rates'),
+        'value' => t('No cached rates'),
+        'severity' => REQUIREMENT_WARNING,
+        'description' => t('Currency rates have not been fetched yet. Please run cron or <a href="@settings">fetch manually</a>.', [
+          '@settings' => '/admin/config/services/monobank-currency',
+        ]),
+      ];
+    }
+
+    // Check if cron has run recently.
+    $cron_last = \Drupal::state()->get('system.cron_last');
+    if ($cron_last) {
+      $time_ago = \Drupal::service('date.formatter')->formatInterval(
+        \Drupal::time()->getRequestTime() - $cron_last
+      );
+
+      if (\Drupal::time()->getRequestTime() - $cron_last > 3600) {
+        $requirements['monobank_currency_cron'] = [
+          'title' => t('Monobank Currency Cron'),
+          'value' => t('Last run @time ago', ['@time' => $time_ago]),
+          'severity' => REQUIREMENT_WARNING,
+          'description' => t('Cron has not run recently. Currency rates may be outdated. Configure cron to run every 30 minutes for optimal results.'),
+        ];
+      }
+    }
+  }
+
+  return $requirements;
+}

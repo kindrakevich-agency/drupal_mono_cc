@@ -1,0 +1,98 @@
+# Spanish translation for Monobank Currency Converter module.
+msgid ""
+msgstr ""
+"Project-Id-Version: Monobank Currency Converter\n"
+"POT-Creation-Date: 2025-01-28 00:00+0000\n"
+"Language: es\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+# Currency names
+msgid "US Dollar"
+msgstr "Dólar estadounidense"
+
+msgid "Ukrainian Hryvnia"
+msgstr "Grivna ucraniana"
+
+msgid "Euro"
+msgstr "Euro"
+
+msgid "British Pound"
+msgstr "Libra esterlina"
+
+msgid "Japanese Yen"
+msgstr "Yen japonés"
+
+msgid "Swiss Franc"
+msgstr "Franco suizo"
+
+msgid "Chinese Yuan"
+msgstr "Yuan chino"
+
+msgid "Polish Złoty"
+msgstr "Złoty polaco"
+
+msgid "Canadian Dollar"
+msgstr "Dólar canadiense"
+
+msgid "Australian Dollar"
+msgstr "Dólar australiano"
+
+msgid "Norwegian Krone"
+msgstr "Corona noruega"
+
+msgid "Swedish Krona"
+msgstr "Corona sueca"
+
+# UI strings
+msgid "Currency Converter"
+msgstr "Convertidor de divisas"
+
+msgid "Conversion Mode"
+msgstr "Modo de conversión"
+
+msgid "Convert From"
+msgstr "Convertir desde"
+
+msgid "Convert To"
+msgstr "Convertir a"
+
+msgid "Amount to exchange"
+msgstr "Cantidad a cambiar"
+
+msgid "Amount to receive"
+msgstr "Cantidad a recibir"
+
+msgid "From"
+msgstr "Desde"
+
+msgid "To"
+msgstr "A"
+
+msgid "Result:"
+msgstr "Resultado:"
+
+msgid "Required:"
+msgstr "Requerido:"
+
+msgid "Exchange Rates (UAH)"
+msgstr "Tipos de cambio (UAH)"
+
+msgid "Currency"
+msgstr "Moneda"
+
+msgid "Buy"
+msgstr "Compra"
+
+msgid "Sell"
+msgstr "Venta"
+
+msgid "Cross"
+msgstr "Cruce"
+
+msgid "Currency rates as of @time"
+msgstr "Tipos de cambio a partir de @time"
+
+msgid "Search currencies..."
+msgstr "Buscar monedas..."

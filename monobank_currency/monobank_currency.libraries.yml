@@ -1,0 +1,10 @@
+converter:
+  version: 1.0
+  css:
+    theme:
+      css/converter.css: {}
+  js:
+    js/converter.js: {}
+  dependencies:
+    - core/drupal
+    - core/drupalSettings

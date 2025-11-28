@@ -1,0 +1,7 @@
+services:
+  monobank_currency.currency_service:
+    class: Drupal\monobank_currency\Service\MonobankCurrencyService
+    arguments: ['@http_client', '@cache.default', '@logger.factory', '@datetime.time']
+
+  monobank_currency.currency_mapper:
+    class: Drupal\monobank_currency\Service\CurrencyMapperService

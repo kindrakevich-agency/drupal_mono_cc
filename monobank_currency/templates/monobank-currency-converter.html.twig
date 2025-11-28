@@ -1,0 +1,48 @@
+<div class="monobank-currency-converter">
+  <div class="converter-header">
+    {% if last_update %}
+      <div class="last-update">
+        <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r="10" stroke-width="2"/>
+          <polyline points="12 6 12 12 16 14" stroke-width="2"/>
+        </svg>
+        <span>{{ 'Currency rates as of @time'|t({'@time': last_update}) }}</span>
+      </div>
+    {% endif %}
+  </div>
+
+  <div class="converter-section">
+    <h2>{{ 'Currency Converter'|t }}</h2>
+    {{ converter_form }}
+  </div>
+
+  <div class="rates-table-section">
+    <h2>{{ 'Exchange Rates (UAH)'|t }}</h2>
+    <div class="rates-table-wrapper">
+      <table class="rates-table">
+        <thead>
+          <tr>
+            <th>{{ 'Currency'|t }}</th>
+            <th>{{ 'Buy'|t }}</th>
+            <th>{{ 'Sell'|t }}</th>
+            <th>{{ 'Cross'|t }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in rates_table %}
+            <tr class="rate-row" data-currency-code="{{ row.code }}">
+              <td class="currency-cell">
+                <img src="{{ row.flag }}" alt="{{ row.currency_code }}" class="currency-flag" loading="lazy">
+                <span class="currency-code">{{ row.currency_code }}</span>
+                <span class="currency-name">{{ row.currency_name|t }}</span>
+              </td>
+              <td class="rate-buy">{{ row.buy }}</td>
+              <td class="rate-sell">{{ row.sell }}</td>
+              <td class="rate-cross">{{ row.cross }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

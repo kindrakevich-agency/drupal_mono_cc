@@ -1,0 +1,73 @@
+<?php
+
+/**
+ * @file
+ * Monobank Currency Converter module.
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+
+/**
+ * Implements hook_help().
+ */
+function monobank_currency_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    case 'help.page.monobank_currency':
+      $output = '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('The Monobank Currency Converter module provides real-time currency exchange functionality using the Monobank API.') . '</p>';
+      $output .= '<h3>' . t('Features') . '</h3>';
+      $output .= '<ul>';
+      $output .= '<li>' . t('Currency converter with two modes (Convert From/Convert To)') . '</li>';
+      $output .= '<li>' . t('Dynamic currency rates table') . '</li>';
+      $output .= '<li>' . t('Automatic rate updates every 30 minutes via cron') . '</li>';
+      $output .= '<li>' . t('Support for 100+ currencies') . '</li>';
+      $output .= '<li>' . t('Currency flags integration') . '</li>';
+      $output .= '</ul>';
+      $output .= '<h3>' . t('Usage') . '</h3>';
+      $output .= '<p>' . t('Visit <a href="@converter">Currency Converter</a> to use the converter.', ['@converter' => '/currency']) . '</p>';
+      return $output;
+  }
+}
+
+/**
+ * Implements hook_cron().
+ */
+function monobank_currency_cron() {
+  // Fetch currency rates every time cron runs.
+  // The service will handle caching internally.
+  $currency_service = \Drupal::service('monobank_currency.currency_service');
+
+  // Force refresh from API.
+  $rates = $currency_service->getRates(TRUE);
+
+  if (!empty($rates)) {
+    \Drupal::logger('monobank_currency')->info('Cron: Successfully updated currency rates. Total: @count', [
+      '@count' => count($rates),
+    ]);
+  }
+  else {
+    \Drupal::logger('monobank_currency')->warning('Cron: Failed to update currency rates.');
+  }
+}
+
+/**
+ * Implements hook_theme().
+ */
+function monobank_currency_theme($existing, $type, $theme, $path) {
+  return [
+    'monobank_currency_converter' => [
+      'variables' => [
+        'converter_form' => NULL,
+        'rates_table' => NULL,
+        'currencies' => [],
+        'last_update' => NULL,
+      ],
+    ],
+    'monobank_currency_rates_table' => [
+      'variables' => [
+        'rates' => [],
+        'currencies' => [],
+      ],
+    ],
+  ];
+}

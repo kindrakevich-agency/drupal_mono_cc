@@ -1,0 +1,98 @@
+# Ukrainian translation for Monobank Currency Converter module.
+msgid ""
+msgstr ""
+"Project-Id-Version: Monobank Currency Converter\n"
+"POT-Creation-Date: 2025-01-28 00:00+0000\n"
+"Language: uk\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+# Currency names
+msgid "US Dollar"
+msgstr "Долар США"
+
+msgid "Ukrainian Hryvnia"
+msgstr "Українська гривня"
+
+msgid "Euro"
+msgstr "Євро"
+
+msgid "British Pound"
+msgstr "Британський фунт"
+
+msgid "Japanese Yen"
+msgstr "Японська ієна"
+
+msgid "Swiss Franc"
+msgstr "Швейцарський франк"
+
+msgid "Chinese Yuan"
+msgstr "Китайський юань"
+
+msgid "Polish Złoty"
+msgstr "Польський злотий"
+
+msgid "Canadian Dollar"
+msgstr "Канадський долар"
+
+msgid "Australian Dollar"
+msgstr "Австралійський долар"
+
+msgid "Norwegian Krone"
+msgstr "Норвезька крона"
+
+msgid "Swedish Krona"
+msgstr "Шведська крона"
+
+# UI strings
+msgid "Currency Converter"
+msgstr "Конвертер валют"
+
+msgid "Conversion Mode"
+msgstr "Режим конвертації"
+
+msgid "Convert From"
+msgstr "Конвертувати з"
+
+msgid "Convert To"
+msgstr "Конвертувати в"
+
+msgid "Amount to exchange"
+msgstr "Сума для обміну"
+
+msgid "Amount to receive"
+msgstr "Сума до отримання"
+
+msgid "From"
+msgstr "З"
+
+msgid "To"
+msgstr "В"
+
+msgid "Result:"
+msgstr "Результат:"
+
+msgid "Required:"
+msgstr "Потрібно:"
+
+msgid "Exchange Rates (UAH)"
+msgstr "Курси валют (UAH)"
+
+msgid "Currency"
+msgstr "Валюта"
+
+msgid "Buy"
+msgstr "Купівля"
+
+msgid "Sell"
+msgstr "Продаж"
+
+msgid "Cross"
+msgstr "Крос"
+
+msgid "Currency rates as of @time"
+msgstr "Курси валют станом на @time"
+
+msgid "Search currencies..."
+msgstr "Пошук валют..."

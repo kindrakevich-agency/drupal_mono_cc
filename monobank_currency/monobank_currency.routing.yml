@@ -1,0 +1,15 @@
+monobank_currency.converter:
+  path: '/currency'
+  defaults:
+    _controller: '\Drupal\monobank_currency\Controller\CurrencyConverterController::build'
+    _title: 'Currency Converter'
+  requirements:
+    _permission: 'access content'
+
+monobank_currency.settings:
+  path: '/admin/config/services/monobank-currency'
+  defaults:
+    _form: '\Drupal\monobank_currency\Form\MonobankCurrencySettingsForm'
+    _title: 'Monobank Currency Settings'
+  requirements:
+    _permission: 'administer site configuration'

@@ -1,0 +1,8 @@
+name: 'Monobank Currency Converter'
+type: module
+description: 'Provides real-time currency exchange functionality using Monobank API with converter and rates table.'
+core_version_requirement: ^11
+package: 'Currency'
+dependencies:
+  - drupal:system
+configure: monobank_currency.settings
