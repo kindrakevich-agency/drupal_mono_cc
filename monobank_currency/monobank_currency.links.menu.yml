@@ -1,0 +1,6 @@
+monobank_currency.settings:
+  title: 'Monobank Currency'
+  description: 'Configure Monobank Currency Converter settings'
+  route_name: monobank_currency.settings
+  parent: system.admin_config_services
+  weight: 10
