@@ -2,20 +2,20 @@
   {# Amount Section #}
   <div class="mb-6 lg:mb-0 lg:flex-1">
     <label class="text-gray-500 text-sm mb-2 block">{{ 'Amount'|t }}</label>
-    <div class="flex items-center gap-4">
+    <div class="flex items-center justify-between gap-4">
       <input type="number"
              name="amount"
              value="1000"
-             class="text-5xl font-bold text-gray-900 outline-none flex-1 border-0 p-0 bg-transparent"
+             class="text-5xl font-bold text-gray-900 outline-none w-full max-w-[200px] border-0 p-0 bg-transparent"
              id="currency-amount"
              step="0.01"
              min="0" />
-      <div class="flex items-center gap-2">
+      <div class="flex items-center gap-2 flex-shrink-0">
         <img id="from-flag" src="" alt="" class="w-6 h-6 rounded-full" />
         <div class="relative">
           <select name="from_currency"
                   id="from-currency-select"
-                  class="appearance-none bg-gray-50 rounded-full px-4 pr-8 py-2 font-semibold text-gray-900 cursor-pointer hover:bg-gray-100 transition outline-none">
+                  class="appearance-none bg-gray-50 rounded-full px-4 pr-8 py-2 font-semibold text-gray-900 cursor-pointer hover:bg-gray-100 transition outline-none w-[100px]">
             {% for code, label in form.from_currency['#options'] %}
               <option value="{{ code }}" {% if code == 840 %}selected{% endif %}>{{ label }}</option>
             {% endfor %}
@@ -49,14 +49,14 @@
   {# Converted Section #}
   <div class="mb-6 lg:mb-0 lg:flex-1">
     <label class="text-gray-500 text-sm mb-2 block">{{ 'Converted to'|t }}</label>
-    <div class="flex items-center gap-4">
-      <div id="converted-amount" class="text-5xl font-bold text-gray-900 flex-1">0.00</div>
-      <div class="flex items-center gap-2">
+    <div class="flex items-center justify-between gap-4">
+      <div id="converted-amount" class="text-5xl font-bold text-gray-900 w-full max-w-[200px]">0.00</div>
+      <div class="flex items-center gap-2 flex-shrink-0">
         <img id="to-flag" src="" alt="" class="w-6 h-6 rounded-full" />
         <div class="relative">
           <select name="to_currency"
                   id="to-currency-select"
-                  class="appearance-none bg-gray-50 rounded-full px-4 pr-8 py-2 font-semibold text-gray-900 cursor-pointer hover:bg-gray-100 transition outline-none">
+                  class="appearance-none bg-gray-50 rounded-full px-4 pr-8 py-2 font-semibold text-gray-900 cursor-pointer hover:bg-gray-100 transition outline-none w-[100px]">
             {% for code, label in form.to_currency['#options'] %}
               <option value="{{ code }}" {% if code == 980 %}selected{% endif %}>{{ label }}</option>
             {% endfor %}
