@@ -95,7 +95,7 @@ class CurrencyConverterForm extends FormBase {
     foreach ($popular as $code) {
       $currency = $this->currencyMapper->getCurrencyByCode($code);
       if ($currency) {
-        $options[$code] = $currency['code'] . ' – ' . $this->t($currency['name']);
+        $options[$code] = $currency['code'];
       }
     }
 
@@ -103,7 +103,7 @@ class CurrencyConverterForm extends FormBase {
     $all_currencies = $this->currencyMapper->getAllCurrencies();
     foreach ($all_currencies as $code => $currency) {
       if (!isset($options[$code])) {
-        $options[$code] = $currency['code'] . ' – ' . $this->t($currency['name']);
+        $options[$code] = $currency['code'];
       }
     }
 

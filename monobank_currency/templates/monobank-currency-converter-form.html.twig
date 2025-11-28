@@ -6,7 +6,7 @@
       <input type="number"
              name="amount"
              value="1000"
-             class="text-5xl font-bold text-gray-900 outline-none w-full max-w-[200px] border-0 p-0 bg-transparent"
+             class="text-3xl font-bold text-gray-900 outline-none w-full max-w-[200px] border-0 p-0 bg-transparent"
              id="currency-amount"
              step="0.01"
              min="0" />
@@ -15,13 +15,14 @@
         <div class="relative">
           <select name="from_currency"
                   id="from-currency-select"
-                  class="appearance-none bg-gray-50 rounded-full px-4 pr-8 py-2 font-semibold text-gray-900 cursor-pointer hover:bg-gray-100 transition outline-none w-[100px]">
+                  class="appearance-none bg-gray-50 rounded-full pl-3 pr-7 py-1.5 text-sm font-semibold text-gray-900 cursor-pointer hover:bg-gray-100 transition outline-none w-[85px] border-0"
+                  style="background-image: none;">
             {% for code, label in form.from_currency['#options'] %}
               <option value="{{ code }}" {% if code == 840 %}selected{% endif %}>{{ label }}</option>
             {% endfor %}
           </select>
           <div class="pointer-events-none absolute inset-y-0 right-2 flex items-center">
-            <svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg class="w-3 h-3 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <polyline points="6 9 12 15 18 9" stroke-width="2"/>
             </svg>
           </div>
@@ -50,19 +51,20 @@
   <div class="mb-6 lg:mb-0 lg:flex-1">
     <label class="text-gray-500 text-sm mb-2 block">{{ 'Converted to'|t }}</label>
     <div class="flex items-center justify-between gap-4">
-      <div id="converted-amount" class="text-5xl font-bold text-gray-900 w-full max-w-[200px]">0.00</div>
+      <div id="converted-amount" class="text-3xl font-bold text-gray-900 w-full max-w-[200px]">0.00</div>
       <div class="flex items-center gap-2 flex-shrink-0">
         <img id="to-flag" src="" alt="" class="w-6 h-6 rounded-full" />
         <div class="relative">
           <select name="to_currency"
                   id="to-currency-select"
-                  class="appearance-none bg-gray-50 rounded-full px-4 pr-8 py-2 font-semibold text-gray-900 cursor-pointer hover:bg-gray-100 transition outline-none w-[100px]">
+                  class="appearance-none bg-gray-50 rounded-full pl-3 pr-7 py-1.5 text-sm font-semibold text-gray-900 cursor-pointer hover:bg-gray-100 transition outline-none w-[85px] border-0"
+                  style="background-image: none;">
             {% for code, label in form.to_currency['#options'] %}
               <option value="{{ code }}" {% if code == 980 %}selected{% endif %}>{{ label }}</option>
             {% endfor %}
           </select>
           <div class="pointer-events-none absolute inset-y-0 right-2 flex items-center">
-            <svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg class="w-3 h-3 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <polyline points="6 9 12 15 18 9" stroke-width="2"/>
             </svg>
           </div>

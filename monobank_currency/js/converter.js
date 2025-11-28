@@ -48,13 +48,15 @@
     const currencySearch = document.getElementById('currency-search');
     const fromFlag = document.getElementById('from-flag');
     const toFlag = document.getElementById('to-flag');
+    const tableHeader = document.getElementById('rates-table-header');
 
     if (!amountInput || !fromSelect || !toSelect || !convertedAmount) {
       return;
     }
 
-    // Update flags initially.
+    // Update flags and header initially.
     updateFlags();
+    updateTableHeader();
 
     // Swap button functionality.
     if (swapButton) {
@@ -79,6 +81,7 @@
     // Live calculation on currency change.
     fromSelect.addEventListener('change', function() {
       updateFlags();
+      updateTableHeader();
       calculateConversion();
       highlightCurrencyRows();
     });
@@ -130,6 +133,17 @@
         toFlag.src = `https://flagcdn.com/24x18/${toCountry}.png`;
         toFlag.alt = toCountry.toUpperCase();
       }
+    }
+
+    /**
+     * Update table header based on selected currency.
+     */
+    function updateTableHeader() {
+      if (!tableHeader) return;
+
+      const fromCode = parseInt(fromSelect.value);
+      const currencyCode = currencies[fromCode]?.code || 'UAH';
+      tableHeader.textContent = 'Exchange Rates (' + currencyCode + ')';
     }
 
     /**
