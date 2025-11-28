@@ -362,20 +362,14 @@
 
         // Get the table cells.
         const cells = row.querySelectorAll('td');
-        if (cells.length >= 4) {
-          const buyCell = cells[1];
-          const sellCell = cells[2];
-          const crossCell = cells[3];
+        if (cells.length >= 2) {
+          const rateCell = cells[1];
 
           if (conversionRate !== null) {
             const value = (conversionRate * amount).toFixed(4);
-            buyCell.textContent = value;
-            sellCell.textContent = value;
-            crossCell.textContent = value;
+            rateCell.textContent = value;
           } else {
-            buyCell.textContent = '-';
-            sellCell.textContent = '-';
-            crossCell.textContent = '-';
+            rateCell.textContent = '-';
           }
         }
       });

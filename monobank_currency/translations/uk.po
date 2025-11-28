@@ -49,32 +49,17 @@ msgstr "Шведська крона"
 msgid "Currency Converter"
 msgstr "Конвертер валют"
 
-msgid "Conversion Mode"
-msgstr "Режим конвертації"
+msgid "Amount"
+msgstr "Сума"
 
-msgid "Convert From"
-msgstr "Конвертувати з"
+msgid "Converted to"
+msgstr "Конвертовано в"
 
-msgid "Convert To"
-msgstr "Конвертувати в"
+msgid "Copy"
+msgstr "Копіювати"
 
-msgid "Amount to exchange"
-msgstr "Сума для обміну"
-
-msgid "Amount to receive"
-msgstr "Сума до отримання"
-
-msgid "From"
-msgstr "З"
-
-msgid "To"
-msgstr "В"
-
-msgid "Result:"
-msgstr "Результат:"
-
-msgid "Required:"
-msgstr "Потрібно:"
+msgid "Copied!"
+msgstr "Скопійовано!"
 
 msgid "Exchange Rates (UAH)"
 msgstr "Курси валют (UAH)"
@@ -82,17 +67,11 @@ msgstr "Курси валют (UAH)"
 msgid "Currency"
 msgstr "Валюта"
 
-msgid "Buy"
-msgstr "Купівля"
+msgid "Rate"
+msgstr "Курс"
 
-msgid "Sell"
-msgstr "Продаж"
-
-msgid "Cross"
-msgstr "Крос"
-
-msgid "Currency rates as of @time"
-msgstr "Курси валют станом на @time"
+msgid "Currency rates as of"
+msgstr "Курси валют станом на"
 
 msgid "Search currencies..."
 msgstr "Пошук валют..."

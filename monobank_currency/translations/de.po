@@ -49,32 +49,17 @@ msgstr "Schwedische Krone"
 msgid "Currency Converter"
 msgstr "Währungsrechner"
 
-msgid "Conversion Mode"
-msgstr "Umrechnungsmodus"
+msgid "Amount"
+msgstr "Betrag"
 
-msgid "Convert From"
-msgstr "Umrechnen von"
+msgid "Converted to"
+msgstr "Umgerechnet in"
 
-msgid "Convert To"
-msgstr "Umrechnen in"
+msgid "Copy"
+msgstr "Kopieren"
 
-msgid "Amount to exchange"
-msgstr "Zu wechselnder Betrag"
-
-msgid "Amount to receive"
-msgstr "Zu erhaltender Betrag"
-
-msgid "From"
-msgstr "Von"
-
-msgid "To"
-msgstr "Nach"
-
-msgid "Result:"
-msgstr "Ergebnis:"
-
-msgid "Required:"
-msgstr "Erforderlich:"
+msgid "Copied!"
+msgstr "Kopiert!"
 
 msgid "Exchange Rates (UAH)"
 msgstr "Wechselkurse (UAH)"
@@ -82,17 +67,11 @@ msgstr "Wechselkurse (UAH)"
 msgid "Currency"
 msgstr "Währung"
 
-msgid "Buy"
-msgstr "Kaufen"
+msgid "Rate"
+msgstr "Kurs"
 
-msgid "Sell"
-msgstr "Verkaufen"
-
-msgid "Cross"
-msgstr "Kreuz"
-
-msgid "Currency rates as of @time"
-msgstr "Wechselkurse ab @time"
+msgid "Currency rates as of"
+msgstr "Wechselkurse ab"
 
 msgid "Search currencies..."
 msgstr "Währungen suchen..."

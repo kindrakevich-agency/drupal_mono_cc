@@ -49,32 +49,17 @@ msgstr "Corona sueca"
 msgid "Currency Converter"
 msgstr "Convertidor de divisas"
 
-msgid "Conversion Mode"
-msgstr "Modo de conversión"
+msgid "Amount"
+msgstr "Cantidad"
 
-msgid "Convert From"
-msgstr "Convertir desde"
+msgid "Converted to"
+msgstr "Convertido a"
 
-msgid "Convert To"
-msgstr "Convertir a"
+msgid "Copy"
+msgstr "Copiar"
 
-msgid "Amount to exchange"
-msgstr "Cantidad a cambiar"
-
-msgid "Amount to receive"
-msgstr "Cantidad a recibir"
-
-msgid "From"
-msgstr "Desde"
-
-msgid "To"
-msgstr "A"
-
-msgid "Result:"
-msgstr "Resultado:"
-
-msgid "Required:"
-msgstr "Requerido:"
+msgid "Copied!"
+msgstr "¡Copiado!"
 
 msgid "Exchange Rates (UAH)"
 msgstr "Tipos de cambio (UAH)"
@@ -82,17 +67,11 @@ msgstr "Tipos de cambio (UAH)"
 msgid "Currency"
 msgstr "Moneda"
 
-msgid "Buy"
-msgstr "Compra"
+msgid "Rate"
+msgstr "Tasa"
 
-msgid "Sell"
-msgstr "Venta"
-
-msgid "Cross"
-msgstr "Cruce"
-
-msgid "Currency rates as of @time"
-msgstr "Tipos de cambio a partir de @time"
+msgid "Currency rates as of"
+msgstr "Tipos de cambio a partir de"
 
 msgid "Search currencies..."
 msgstr "Buscar monedas..."
