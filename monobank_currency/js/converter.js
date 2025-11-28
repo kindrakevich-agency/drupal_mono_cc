@@ -8,19 +8,107 @@
 
   Drupal.behaviors.monobankCurrencyConverter = {
     attach: function (context, settings) {
-      var $converter = $('.monobank-currency-converter', context);
+      var rates = drupalSettings.monobankCurrency?.rates || [];
+      var currencies = drupalSettings.monobankCurrency?.currencies || {};
 
-      if ($converter.length === 0) {
-        return;
-      }
+      // Swap button functionality.
+      $('#swap-currencies', context).once('swap-handler').on('click', function(e) {
+        e.preventDefault();
 
-      // Highlight rows when currency is selected.
-      $('select[name="from_currency"], select[name="to_currency"]', $converter).once('currency-highlight').on('change', function() {
+        var $fromSelect = $('select[name="from_currency"]');
+        var $toSelect = $('select[name="to_currency"]');
+
+        var fromVal = $fromSelect.val();
+        var toVal = $toSelect.val();
+
+        $fromSelect.val(toVal);
+        $toSelect.val(fromVal);
+
+        // Recalculate.
+        calculateConversion();
+      });
+
+      // Live calculation on amount input.
+      $('input[name="amount"]', context).once('amount-calc').on('input', function() {
+        calculateConversion();
+      });
+
+      // Live calculation on currency change.
+      $('select[name="from_currency"], select[name="to_currency"]', context).once('currency-calc').on('change', function() {
+        calculateConversion();
         highlightCurrencyRows();
       });
 
-      // Initial highlight.
+      // Initial calculation.
+      calculateConversion();
       highlightCurrencyRows();
+
+      /**
+       * Calculate and display conversion.
+       */
+      function calculateConversion() {
+        var amount = parseFloat($('input[name="amount"]').val()) || 0;
+        var fromCode = parseInt($('select[name="from_currency"]').val());
+        var toCode = parseInt($('select[name="to_currency"]').val());
+
+        if (amount && fromCode && toCode) {
+          var rate = getRate(fromCode, toCode);
+          if (rate !== null) {
+            var converted = amount * rate;
+            $('#converted-amount').text(converted.toFixed(2));
+          } else {
+            $('#converted-amount').text('—');
+          }
+        }
+      }
+
+      /**
+       * Get exchange rate between two currencies.
+       */
+      function getRate(fromCode, toCode) {
+        if (fromCode === toCode) {
+          return 1;
+        }
+
+        // Find direct rate.
+        for (var i = 0; i < rates.length; i++) {
+          var rate = rates[i];
+          if (rate.currencyCodeA == fromCode && rate.currencyCodeB == toCode) {
+            return rate.rateSell || rate.rateBuy || rate.rateCross || null;
+          }
+        }
+
+        // Try reverse rate.
+        for (var i = 0; i < rates.length; i++) {
+          var rate = rates[i];
+          if (rate.currencyCodeA == toCode && rate.currencyCodeB == fromCode) {
+            var reverseRate = rate.rateBuy || rate.rateSell || rate.rateCross;
+            if (reverseRate && reverseRate > 0) {
+              return 1 / reverseRate;
+            }
+          }
+        }
+
+        // Try cross rate via UAH (980).
+        var fromToUah = null;
+        var toToUah = null;
+
+        for (var i = 0; i < rates.length; i++) {
+          var rate = rates[i];
+          if (rate.currencyCodeA == fromCode && rate.currencyCodeB == 980) {
+            fromToUah = rate.rateSell || rate.rateBuy || rate.rateCross;
+          }
+          if (rate.currencyCodeA == toCode && rate.currencyCodeB == 980) {
+            toToUah = rate.rateSell || rate.rateBuy || rate.rateCross;
+          }
+        }
+
+        if (fromToUah && toToUah) {
+          return fromToUah / toToUah;
+        }
+
+        return null;
+      }
 
       /**
        * Highlight table rows based on selected currencies.
@@ -30,85 +118,31 @@
         var toCurrency = $('select[name="to_currency"]').val();
 
         // Remove all highlights.
-        $('.rate-row', $converter).removeClass('highlighted');
+        $('.rate-row').removeClass('bg-blue-50 border-l-4 border-l-blue-500');
 
         // Highlight selected currencies.
         if (fromCurrency && fromCurrency != 980) {
-          $('.rate-row[data-currency-code="' + fromCurrency + '"]', $converter).addClass('highlighted');
+          $('.rate-row[data-currency-code="' + fromCurrency + '"]').addClass('bg-blue-50 border-l-4 border-l-blue-500');
         }
         if (toCurrency && toCurrency != 980) {
-          $('.rate-row[data-currency-code="' + toCurrency + '"]', $converter).addClass('highlighted');
-        }
-
-        // Scroll to first highlighted row.
-        var $firstHighlighted = $('.rate-row.highlighted', $converter).first();
-        if ($firstHighlighted.length) {
-          $firstHighlighted[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+          $('.rate-row[data-currency-code="' + toCurrency + '"]').addClass('bg-blue-50 border-l-4 border-l-blue-500');
         }
       }
 
-      // Add swap functionality if swap button exists.
-      $('.swap-currencies', $converter).once('swap-handler').on('click', function(e) {
-        e.preventDefault();
+      // Currency search functionality.
+      $('#currency-search', context).once('currency-search').on('input', function() {
+        var searchTerm = $(this).val().toLowerCase();
 
-        var $fromSelect = $('select[name="from_currency"]', $converter);
-        var $toSelect = $('select[name="to_currency"]', $converter);
+        $('#rates-table-body tr').each(function() {
+          var $row = $(this);
+          var text = $row.text().toLowerCase();
 
-        var fromVal = $fromSelect.val();
-        var toVal = $toSelect.val();
-
-        $fromSelect.val(toVal).trigger('change');
-        $toSelect.val(fromVal).trigger('change');
-      });
-
-      // Real-time calculation for amount inputs.
-      $('input[name="amount"], input[name="target_amount"]', $converter).once('amount-calculator').on('input', function() {
-        // Trigger AJAX update via Drupal's AJAX framework.
-        $(this).trigger('change');
-      });
-
-      // Add currency search/filter functionality.
-      if ($('.rates-table', $converter).length) {
-        addTableSearch();
-      }
-
-      /**
-       * Add search functionality to rates table.
-       */
-      function addTableSearch() {
-        var $table = $('.rates-table', $converter);
-        var $tbody = $table.find('tbody');
-
-        // Create search input if it doesn't exist.
-        if ($('.table-search', $converter).length === 0) {
-          var $searchWrapper = $('<div class="table-search-wrapper"></div>');
-          var $searchInput = $('<input type="text" class="table-search" placeholder="' + Drupal.t('Search currencies...') + '">');
-
-          $searchWrapper.append($searchInput);
-          $table.before($searchWrapper);
-
-          $searchInput.on('input', function() {
-            var searchTerm = $(this).val().toLowerCase();
-
-            $tbody.find('tr').each(function() {
-              var $row = $(this);
-              var currencyCode = $row.find('.currency-code').text().toLowerCase();
-              var currencyName = $row.find('.currency-name').text().toLowerCase();
-
-              if (currencyCode.indexOf(searchTerm) !== -1 || currencyName.indexOf(searchTerm) !== -1) {
-                $row.show();
-              } else {
-                $row.hide();
-              }
-            });
-          });
-        }
-      }
-
-      // Format numbers in result display.
-      $('.conversion-result', $converter).once('number-formatter').each(function() {
-        var $result = $(this);
-        // Numbers are already formatted server-side, this is for future enhancements.
+          if (text.indexOf(searchTerm) !== -1) {
+            $row.show();
+          } else {
+            $row.hide();
+          }
+        });
       });
     }
   };

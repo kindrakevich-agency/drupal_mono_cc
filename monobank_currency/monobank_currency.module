@@ -69,5 +69,60 @@ function monobank_currency_theme($existing, $type, $theme, $path) {
         'currencies' => [],
       ],
     ],
+    'monobank_currency_converter_form' => [
+      'render element' => 'form',
+      'template' => 'monobank-currency-converter-form',
+    ],
   ];
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function monobank_currency_form_alter(&$form, $form_state, $form_id) {
+  if ($form_id === 'monobank_currency_converter_form') {
+    // Add Tailwind classes to form elements.
+    $form['#theme'] = 'monobank_currency_converter_form';
+
+    if (isset($form['amount'])) {
+      $form['amount']['#attributes']['class'][] = 'text-5xl';
+      $form['amount']['#attributes']['class'][] = 'font-bold';
+      $form['amount']['#attributes']['class'][] = 'text-gray-900';
+      $form['amount']['#attributes']['class'][] = 'outline-none';
+      $form['amount']['#attributes']['class'][] = 'w-full';
+      $form['amount']['#attributes']['class'][] = 'border-0';
+      $form['amount']['#attributes']['class'][] = 'p-0';
+      unset($form['amount']['#title']);
+    }
+
+    if (isset($form['from_currency'])) {
+      $form['from_currency']['#attributes']['class'][] = 'appearance-none';
+      $form['from_currency']['#attributes']['class'][] = 'bg-gray-50';
+      $form['from_currency']['#attributes']['class'][] = 'rounded-full';
+      $form['from_currency']['#attributes']['class'][] = 'px-4';
+      $form['from_currency']['#attributes']['class'][] = 'py-2';
+      $form['from_currency']['#attributes']['class'][] = 'font-semibold';
+      $form['from_currency']['#attributes']['class'][] = 'text-gray-900';
+      $form['from_currency']['#attributes']['class'][] = 'cursor-pointer';
+      $form['from_currency']['#attributes']['class'][] = 'hover:bg-gray-100';
+      $form['from_currency']['#attributes']['class'][] = 'transition';
+      $form['from_currency']['#attributes']['class'][] = 'outline-none';
+      unset($form['from_currency']['#title']);
+    }
+
+    if (isset($form['to_currency'])) {
+      $form['to_currency']['#attributes']['class'][] = 'appearance-none';
+      $form['to_currency']['#attributes']['class'][] = 'bg-gray-50';
+      $form['to_currency']['#attributes']['class'][] = 'rounded-full';
+      $form['to_currency']['#attributes']['class'][] = 'px-4';
+      $form['to_currency']['#attributes']['class'][] = 'py-2';
+      $form['to_currency']['#attributes']['class'][] = 'font-semibold';
+      $form['to_currency']['#attributes']['class'][] = 'text-gray-900';
+      $form['to_currency']['#attributes']['class'][] = 'cursor-pointer';
+      $form['to_currency']['#attributes']['class'][] = 'hover:bg-gray-100';
+      $form['to_currency']['#attributes']['class'][] = 'transition';
+      $form['to_currency']['#attributes']['class'][] = 'outline-none';
+      unset($form['to_currency']['#title']);
+    }
+  }
 }

@@ -1,48 +1,62 @@
-<div class="monobank-currency-converter">
-  <div class="converter-header">
-    {% if last_update %}
-      <div class="last-update">
-        <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <circle cx="12" cy="12" r="10" stroke-width="2"/>
-          <polyline points="12 6 12 12 16 14" stroke-width="2"/>
-        </svg>
-        <span>{{ 'Currency rates as of @time'|t({'@time': last_update}) }}</span>
+<div class="bg-gray-50 min-h-screen p-4">
+  <div class="w-full max-w-6xl mx-auto">
+    {# Header #}
+    <div class="flex justify-center gap-4 mb-12 flex-wrap">
+      {% if last_update %}
+        <div class="bg-white rounded-full px-6 py-3 shadow-sm flex items-center gap-2">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="10" stroke-width="2"/>
+            <polyline points="12 6 12 12 16 14" stroke-width="2"/>
+          </svg>
+          <span class="font-medium text-gray-800">{{ 'Currency rates as of @time'|t({'@time': last_update}) }}</span>
+        </div>
+      {% endif %}
+    </div>
+
+    {# Converter Card #}
+    <div class="bg-white rounded-3xl shadow-lg p-8 mb-8">
+      {{ converter_form }}
+    </div>
+
+    {# Rates Table Section #}
+    <div class="bg-white rounded-3xl shadow-lg p-8">
+      <h2 class="text-2xl font-bold text-gray-900 mb-6">{{ 'Exchange Rates (UAH)'|t }}</h2>
+
+      {# Search Box #}
+      <div class="mb-4">
+        <input type="text" id="currency-search" placeholder="{{ 'Search currencies...'|t }}"
+               class="w-full max-w-md px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
       </div>
-    {% endif %}
-  </div>
 
-  <div class="converter-section">
-    <h2>{{ 'Currency Converter'|t }}</h2>
-    {{ converter_form }}
-  </div>
-
-  <div class="rates-table-section">
-    <h2>{{ 'Exchange Rates (UAH)'|t }}</h2>
-    <div class="rates-table-wrapper">
-      <table class="rates-table">
-        <thead>
-          <tr>
-            <th>{{ 'Currency'|t }}</th>
-            <th>{{ 'Buy'|t }}</th>
-            <th>{{ 'Sell'|t }}</th>
-            <th>{{ 'Cross'|t }}</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for row in rates_table %}
-            <tr class="rate-row" data-currency-code="{{ row.code }}">
-              <td class="currency-cell">
-                <img src="{{ row.flag }}" alt="{{ row.currency_code }}" class="currency-flag" loading="lazy">
-                <span class="currency-code">{{ row.currency_code }}</span>
-                <span class="currency-name">{{ row.currency_name|t }}</span>
-              </td>
-              <td class="rate-buy">{{ row.buy }}</td>
-              <td class="rate-sell">{{ row.sell }}</td>
-              <td class="rate-cross">{{ row.cross }}</td>
+      {# Rates Table #}
+      <div class="overflow-x-auto rounded-lg border border-gray-200">
+        <table class="w-full">
+          <thead class="bg-gray-50 border-b-2 border-gray-200">
+            <tr>
+              <th class="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">{{ 'Currency'|t }}</th>
+              <th class="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">{{ 'Buy'|t }}</th>
+              <th class="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">{{ 'Sell'|t }}</th>
+              <th class="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">{{ 'Cross'|t }}</th>
             </tr>
-          {% endfor %}
-        </tbody>
-      </table>
+          </thead>
+          <tbody id="rates-table-body">
+            {% for row in rates_table %}
+              <tr class="border-b border-gray-100 hover:bg-gray-50 transition rate-row" data-currency-code="{{ row.code }}">
+                <td class="px-6 py-4">
+                  <div class="flex items-center gap-3">
+                    <img src="{{ row.flag }}" alt="{{ row.currency_code }}" class="w-6 h-5 rounded object-cover" loading="lazy">
+                    <span class="font-semibold text-gray-900">{{ row.currency_code }}</span>
+                    <span class="text-gray-500 currency-name">{{ row.currency_name|t }}</span>
+                  </div>
+                </td>
+                <td class="px-6 py-4 font-mono font-medium text-gray-900">{{ row.buy }}</td>
+                <td class="px-6 py-4 font-mono font-medium text-gray-900">{{ row.sell }}</td>
+                <td class="px-6 py-4 font-mono font-medium text-gray-900">{{ row.cross }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 </div>
