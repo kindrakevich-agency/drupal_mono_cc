@@ -71,7 +71,10 @@
     }
 
     // Live calculation on amount input.
-    amountInput.addEventListener('input', calculateConversion);
+    amountInput.addEventListener('input', function() {
+      calculateConversion();
+      updateTableRates();
+    });
 
     // Live calculation on currency change.
     fromSelect.addEventListener('change', function() {
@@ -106,6 +109,7 @@
     // Initial calculation.
     calculateConversion();
     highlightCurrencyRows();
+    updateTableRates();
 
     /**
      * Update flag images based on selected currencies.
@@ -224,6 +228,66 @@
           toRow.classList.add('bg-blue-50', 'border-l-4', 'border-l-blue-500');
         }
       }
+    }
+
+    /**
+     * Update table rates based on current amount.
+     */
+    function updateTableRates() {
+      const amount = parseFloat(amountInput.value) || 1;
+      const rows = document.querySelectorAll('.rate-row');
+
+      rows.forEach(function(row) {
+        const currencyCode = parseInt(row.getAttribute('data-currency-code'));
+
+        // Find the rate for this currency.
+        let buyRate = null;
+        let sellRate = null;
+        let crossRate = null;
+
+        for (let i = 0; i < rates.length; i++) {
+          const rate = rates[i];
+          if (rate.currencyCodeA == currencyCode && rate.currencyCodeB == 980) {
+            buyRate = rate.rateBuy;
+            sellRate = rate.rateSell;
+            crossRate = rate.rateCross;
+            break;
+          }
+        }
+
+        // Get the table cells.
+        const cells = row.querySelectorAll('td');
+        if (cells.length >= 4) {
+          const buyCell = cells[1];
+          const sellCell = cells[2];
+          const crossCell = cells[3];
+
+          // Update buy value.
+          if (buyRate) {
+            buyCell.textContent = (buyRate * amount).toFixed(4);
+          } else if (crossRate) {
+            buyCell.textContent = (crossRate * amount).toFixed(4);
+          } else {
+            buyCell.textContent = '-';
+          }
+
+          // Update sell value.
+          if (sellRate) {
+            sellCell.textContent = (sellRate * amount).toFixed(4);
+          } else if (crossRate) {
+            sellCell.textContent = (crossRate * amount).toFixed(4);
+          } else {
+            sellCell.textContent = '-';
+          }
+
+          // Update cross value.
+          if (crossRate) {
+            crossCell.textContent = (crossRate * amount).toFixed(4);
+          } else {
+            crossCell.textContent = '-';
+          }
+        }
+      });
     }
   }
 

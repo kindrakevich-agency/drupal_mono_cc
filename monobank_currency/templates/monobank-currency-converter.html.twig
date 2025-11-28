@@ -2,15 +2,13 @@
   <div class="w-full max-w-6xl mx-auto">
     {# Header #}
     <div class="flex justify-center gap-4 mb-12 flex-wrap">
-      {% if last_update %}
-        <div class="bg-white rounded-full px-6 py-3 shadow-sm flex items-center gap-2">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <circle cx="12" cy="12" r="10" stroke-width="2"/>
-            <polyline points="12 6 12 12 16 14" stroke-width="2"/>
-          </svg>
-          <span class="font-medium text-gray-800">{{ 'Currency rates as of @time'|t({'@time': last_update}) }}</span>
-        </div>
-      {% endif %}
+      <div class="bg-white rounded-full px-6 py-3 shadow-sm flex items-center gap-2">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r="10" stroke-width="2"/>
+          <polyline points="12 6 12 12 16 14" stroke-width="2"/>
+        </svg>
+        <span class="font-medium text-gray-800">{{ 'Currency rates as of'|t }} {{ last_update }}</span>
+      </div>
     </div>
 
     {# Converter Card #}
